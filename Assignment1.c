@@ -10,7 +10,6 @@ int main()
   fgets(str, sizeof(str), stdin);
   fflush(stdin);
 
-  // removing spaces from the string
   char temp[300000];
   int j = 0;
   for (int i = 0; i < strlen(str); i++)
@@ -21,9 +20,7 @@ int main()
       j++;
     }
   }
-  temp[j] = '\0';
 
-  // Validating the string
   int len = strlen(temp);
   temp[len - 1] = '\0';
   for (int i = 0; temp[i] != '\0'; i++)
@@ -45,7 +42,6 @@ int main()
   char op = '+';
   int num = 0;
 
-  // evaluating the result
   for (int i = 0; i < strlen(temp); i++)
   {
     if (isdigit(temp[i]))
