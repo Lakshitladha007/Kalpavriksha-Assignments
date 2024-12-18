@@ -5,12 +5,12 @@
 
 typedef struct
 {
-    int ID;
-    char Name[51];
-    int Age;
+    int id;
+    char name[51];
+    int age;
 } User;
 
-void Create()
+void createUser()
 {
     fflush(stdin);
     User u1, u2;
@@ -24,18 +24,18 @@ void Create()
     }
 
     printf("Enter ID, name and Age of user:\n");
-    scanf("%d", &u1.ID);
+    scanf("%d", &u1.id);
     fflush(stdin);
-    fgets(u1.Name, 50, stdin);
+    fgets(u1.name, 50, stdin);
     fflush(stdin);
-    scanf("%d", &u1.Age);
-    int len = strlen(u1.Name);
+    scanf("%d", &u1.age);
+    int len = strlen(u1.name);
 
-    u1.Name[len - 1] = '\0';
+    u1.name[len - 1] = '\0';
 
     while (fread(&u2, sizeof(u1), 1, fp))
     {
-        if (u2.ID == u1.ID)
+        if (u2.id == u1.id)
         {
             printf("Cannot create user, UNIQUE ID constraint\n");
             exit(1);
@@ -44,9 +44,10 @@ void Create()
 
     fwrite(&u1, sizeof(u1), 1, fp);
     fclose(fp);
+
 }
 
-void Read()
+void readUser()
 {
     User u1;
     FILE *fp;
@@ -60,15 +61,16 @@ void Read()
 
     while (fread(&u1, sizeof(u1), 1, fp))
     {
-        printf("%d %s %d\n", u1.ID, u1.Name, u1.Age);
+        printf("%d %s %d\n", u1.id, u1.name, u1.age);
     }
 
     fclose(fp);
 
     printf("Records read Successfully\n");
+
 }
 
-void Update()
+void updateUser()
 {
     User u1, u2;
     bool flag;
@@ -79,24 +81,24 @@ void Update()
     if (fp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
     if (tp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
-    int targetID;
+    int targetId;
     printf("Enter the ID of user to be updated\n");
-    scanf("%d", &targetID);
+    scanf("%d", &targetId);
     while (fread(&u1, sizeof(u1), 1, fp))
     {
-        if (u1.ID == targetID)
+        if (u1.id == targetId)
         {
             flag = 1;
-            u2.ID = targetID;
+            u2.id = targetId;
             bool boolName;
             printf("If you want to update name, enter '1' else '0':\n");
             scanf("%d", &boolName);
@@ -104,13 +106,13 @@ void Update()
             {
                 fflush(stdin);
                 printf("Enter new name:\n");
-                fgets(u2.Name, 50, stdin);
-                int len = strlen(u2.Name);
-                u2.Name[len - 1] = '\0';
+                fgets(u2.name, 50, stdin);
+                int len = strlen(u2.name);
+                u2.name[len - 1] = '\0';
             }
             else
             {
-                strcpy(u2.Name, u1.Name);
+                strcpy(u2.name, u1.name);
             }
             bool boolAge;
             fflush(stdin);
@@ -119,11 +121,11 @@ void Update()
             if (boolAge)
             {
                 printf("Enter new Age:\n");
-                scanf("%d", &u2.Age);
+                scanf("%d", &u2.age);
             }
             else
             {
-                u2.Age = u1.Age;
+                u2.age = u1.age;
             }
             fwrite(&u2, sizeof(u2), 1, tp);
         }
@@ -146,9 +148,10 @@ void Update()
     {
         printf("Cannot update user, as user with given ID doesnot exist\n");
     }
+
 }
 
-void Delete()
+void deleteUser()
 {
     User u1;
     FILE *fp, *tp;
@@ -168,13 +171,13 @@ void Delete()
     }
 
     bool flag = 0;
-    int targetID;
+    int targetId;
     printf("Enter ID of user to be deleted:\n");
-    scanf("%d",&targetID);
+    scanf("%d",&targetId);
 
     while (fread(&u1, sizeof(u1), 1, fp))
     {
-        if (u1.ID != targetID)
+        if (u1.id != targetId)
         {
             fwrite(&u1, sizeof(u1), 1, tp);
         }
@@ -197,6 +200,7 @@ void Delete()
     {
         printf("Can't delete user, as User with given ID does not Exist\n");
     }
+
 }
 
 int main()
