@@ -13,55 +13,55 @@ typedef struct
 void createUser()
 {
     fflush(stdin);
-    User u1, u2;
+    User user1, user2;
     FILE *fp;
     fp = fopen("users.txt", "a+");
 
     if (fp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
     printf("Enter ID, name and Age of user:\n");
-    scanf("%d", &u1.id);
+    scanf("%d", &user1.id);
     fflush(stdin);
-    fgets(u1.name, 50, stdin);
+    fgets(user1.name, 50, stdin);
     fflush(stdin);
-    scanf("%d", &u1.age);
-    int len = strlen(u1.name);
+    scanf("%d", &user1.age);
+    int len = strlen(user1.name);
 
-    u1.name[len - 1] = '\0';
+    user1.name[len - 1] = '\0';
 
-    while (fread(&u2, sizeof(u1), 1, fp))
+    while (fread(&user2, sizeof(user1), 1, fp))
     {
-        if (u2.id == u1.id)
+        if (user2.id == user1.id)
         {
             printf("Cannot create user, UNIQUE ID constraint\n");
-            exit(1);
+            return;
         }
     }
 
-    fwrite(&u1, sizeof(u1), 1, fp);
+    fwrite(&user1, sizeof(user1), 1, fp);
     fclose(fp);
 
 }
 
 void readUser()
 {
-    User u1;
+    User user1;
     FILE *fp;
     fp = fopen("users.txt", "a+");
     
     if (fp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
-    while (fread(&u1, sizeof(u1), 1, fp))
+    while (fread(&user1, sizeof(user1), 1, fp))
     {
-        printf("%d %s %d\n", u1.id, u1.name, u1.age);
+        printf("%d %s %d\n", user1.id, user1.name, user1.age);
     }
 
     fclose(fp);
@@ -72,8 +72,8 @@ void readUser()
 
 void updateUser()
 {
-    User u1, u2;
-    bool flag;
+    User user1, user2;
+    bool flag=0;
     FILE *fp, *tp;
     fp = fopen("users.txt", "r+");
     tp = fopen("temp.txt", "w+");
@@ -93,12 +93,12 @@ void updateUser()
     int targetId;
     printf("Enter the ID of user to be updated\n");
     scanf("%d", &targetId);
-    while (fread(&u1, sizeof(u1), 1, fp))
+    while (fread(&user1, sizeof(user1), 1, fp))
     {
-        if (u1.id == targetId)
+        if (user1.id == targetId)
         {
             flag = 1;
-            u2.id = targetId;
+            user2.id = targetId;
             bool boolName;
             printf("If you want to update name, enter '1' else '0':\n");
             scanf("%d", &boolName);
@@ -106,13 +106,13 @@ void updateUser()
             {
                 fflush(stdin);
                 printf("Enter new name:\n");
-                fgets(u2.name, 50, stdin);
-                int len = strlen(u2.name);
-                u2.name[len - 1] = '\0';
+                fgets(user2.name, 50, stdin);
+                int len = strlen(user2.name);
+                user2.name[len - 1] = '\0';
             }
             else
             {
-                strcpy(u2.name, u1.name);
+                strcpy(user2.name, user1.name);
             }
             bool boolAge;
             fflush(stdin);
@@ -121,17 +121,17 @@ void updateUser()
             if (boolAge)
             {
                 printf("Enter new Age:\n");
-                scanf("%d", &u2.age);
+                scanf("%d", &user2.age);
             }
             else
             {
-                u2.age = u1.age;
+                user2.age = user1.age;
             }
-            fwrite(&u2, sizeof(u2), 1, tp);
+            fwrite(&user2, sizeof(user2), 1, tp);
         }
         else
         {
-            fwrite(&u1, sizeof(u1), 1, tp);
+            fwrite(&user1, sizeof(user1), 1, tp);
         }
     }
 
@@ -146,14 +146,14 @@ void updateUser()
     }
     else
     {
-        printf("Cannot update user, as user with given ID doesnot exist\n");
+        printf("Cannot update user, as user with given ID does not exist\n");
     }
 
 }
 
 void deleteUser()
 {
-    User u1;
+    User user1;
     FILE *fp, *tp;
     fp = fopen("users.txt", "r+");
     tp = fopen("temp.txt", "w+");
@@ -161,13 +161,13 @@ void deleteUser()
     if (fp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
     if (tp == NULL)
     {
         printf("Cannot open file\n");
-        exit(1);
+        return;
     }
 
     bool flag = 0;
@@ -175,11 +175,11 @@ void deleteUser()
     printf("Enter ID of user to be deleted:\n");
     scanf("%d",&targetId);
 
-    while (fread(&u1, sizeof(u1), 1, fp))
+    while (fread(&user1, sizeof(user1), 1, fp))
     {
-        if (u1.id != targetId)
+        if (user1.id != targetId)
         {
-            fwrite(&u1, sizeof(u1), 1, tp);
+            fwrite(&user1, sizeof(user1), 1, tp);
         }
         else
         {
@@ -206,4 +206,6 @@ void deleteUser()
 int main()
 {
    return 0;
+    
 }
+
