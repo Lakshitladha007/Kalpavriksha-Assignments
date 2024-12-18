@@ -2,87 +2,115 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include<limits.h>
 
-int main()
+void removeSpaces(char *inputString)
 {
-  char str[300000];
-  printf("Enter the string you want to evaluate:\n");
-  fgets(str, sizeof(str), stdin);
-  fflush(stdin);
-
-  char temp[300000];
-  int j = 0;
-  for (int i = 0; i < strlen(str); i++)
+  int currentChar = 0;
+  for (int index = 0; index < strlen(inputString); index++)
   {
-    if (str[i] != ' ')
+    if (inputString[index] != ' ')
     {
-      temp[j] = str[i];
-      j++;
+      inputString[currentChar] = inputString[index];
+      currentChar++;
     }
   }
+  currentChar--;
+  inputString[currentChar] = '\0';
+  return;
 
-  int len = strlen(temp);
-  temp[len - 1] = '\0';
-  for (int i = 0; temp[i] != '\0'; i++)
+}
+
+int validateString(char *inputString)
+{
+  for (int index = 0; inputString[index] != '\0'; index++)
   {
-    char ch = temp[i];
-    if (!isdigit(ch))
+    char currentCharacter = inputString[index];
+    if (!isdigit(currentCharacter))
     {
-      if (ch != '+' && ch != '-' && ch != '*' && ch != '/')
+      if (currentCharacter != '+' && currentCharacter != '-' && currentCharacter != '*' && currentCharacter != '/')
       {
-        printf("ERROR!!! INVALID INPUT");
-        exit(1);
+        return 0;
       }
     }
   }
+  return 1;
 
+}
+
+int calculate(char *inputString)
+{
   int stack[300000];
   int top = -1;
-  int sign = 1;
-  char op = '+';
+  char operator= '+';
   int num = 0;
 
-  for (int i = 0; i < strlen(temp); i++)
+  for (int index = 0; index < strlen(inputString); index++)
   {
-    if (isdigit(temp[i]))
+    if (isdigit(inputString[index]))
     {
-      num = num * 10 + (temp[i] - '0');
+      num = num * 10 + (inputString[index] - '0');
     }
-    if (!isdigit(temp[i]) || temp[i + 1] == '\0')
+    if (!isdigit(inputString[index]) || inputString[index + 1] == '\0')
     {
-      if (op == '+')
+      if (operator== '+')
       {
         top++;
         stack[top] = num;
       }
-      else if (op == '-')
+      else if (operator== '-')
       {
         top++;
         stack[top] = num * -1;
       }
-      else if (op == '*')
+      else if (operator== '*')
       {
         int temp = stack[top];
         temp = temp * num;
         stack[top] = temp;
       }
-      else if (op == '/')
+      else if (operator== '/')
       {
         int temp = stack[top];
+        if(num==0){
+          printf("Divide by Zero Exception!\n");
+          return INT_MIN;
+        }
         temp = temp / num;
         stack[top] = temp;
       }
-      op = temp[i];
+      operator= inputString[index];
       num = 0;
     }
   }
 
   int result = 0;
-  for (int i = 0; i <= top; i++)
+  for (int index = 0; index <= top; index++)
   {
-    result += stack[i];
+    result += stack[index];
   }
+  return result;
 
-  printf("The result is:%d", result);
+}
+
+int main()
+{
+  char inputString[300000];
+  printf("Enter the string you want to evaluate:\n");
+  fgets(inputString, sizeof(inputString), stdin);
+
+  removeSpaces(inputString);
+
+  if (validateString(inputString) == 0)
+  {
+    printf("Error! Invalid Input\n");
+    return 0;
+  }
+  
+  int result=calculate(inputString);
+  if(result!=INT_MIN){
+  printf("The result is:%d\n",result );
+  }
   return 0;
+
 }
