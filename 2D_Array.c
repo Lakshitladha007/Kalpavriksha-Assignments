@@ -2,12 +2,7 @@
 #include <string.h>
 
 int validator(int row, int col){
-    if (row > 10 || row < 1)
-    {
-        printf("invalid input constraint:\n");
-        return 0;
-    }
-    if (col > 101 || col < 1)
+    if (row > 10 || row < 1 || col > 101 || col < 1)
     {
         printf("invalid input constraint:\n");
         return 0;
@@ -57,7 +52,6 @@ int main()
     int count = 0, maxLen = 0;
     for (int i = 0; i < row; i++)
     {
-
         for (int j = 0; j < col; j++)
         {
             char str[51];
