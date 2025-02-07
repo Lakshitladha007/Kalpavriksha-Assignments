@@ -35,18 +35,18 @@ void searchValue(Node* hashMap[]){
     printf("Enter key: ");
     scanf("%d",&key);
     int index=key%MAX_SIZE;
-    Node* temp=hashMap[index];
-    if(temp==NULL){
+    Node* iterator=hashMap[index];
+    if(iterator==NULL){
         printf("Invalid Key\n");
     }else{
         int flag=1;
-        while(temp!=NULL){
-            if(temp->key==key){
+        while(iterator!=NULL){
+            if(iterator->key==key){
                 flag=0;
-                printf("Value: %d\n",temp->val);
+                printf("Value: %d\n",iterator->val);
                 break;
             }
-            temp=temp->next;
+            iterator=iterator->next;
         }
         if(flag){
            printf("Invalid Key\n"); 
@@ -61,14 +61,14 @@ void deleteValue(Node* hashMap[]){
     scanf("%d",&key);
     
     int index=key%MAX_SIZE;
-    Node* temp=hashMap[index];
-    if(temp==NULL){
+    Node* iterator=hashMap[index];
+    if(iterator==NULL){
        printf("Can't delete, Invalid Key\n");
        return;
     }
-    if(temp->next==NULL){ // single node for this index
-        if(temp->key==key){
-        free(temp);
+    if(iterator->next==NULL){ // single node for this index
+        if(iterator->key==key){
+        free(iterator);
         printf("Key %d deleted\n",key);
         hashMap[index]=NULL;
         return;
@@ -78,16 +78,16 @@ void deleteValue(Node* hashMap[]){
         }
     }
     
-    Node* prev=temp;
-    temp=temp->next;
-    while(temp!=NULL){
-        if(temp->key==key){ // delete this key
-            prev->next=temp->next;
+    Node* previous=iterator;
+    iterator=iterator->next;
+    while(iterator!=NULL){
+        if(iterator->key==key){ // delete this key
+            previous->next=iterator->next;
             printf("Key %d deleted\n",key);
             return;
         }
-        prev=temp;
-        temp=temp->next;
+        previous=iterator;
+        iterator=iterator->next;
     }
     printf("Can't delete, Invalid Key\n");
 }
@@ -97,17 +97,17 @@ void displayValue(Node* hashMap[]){
     for(int i=0; i<MAX_SIZE; i++){
         if(hashMap[i]!=NULL){
             flag=0;
-            Node* temp=hashMap[i];
+            Node* iterator=hashMap[i];
             int flag=1;
             printf("Index %d:",i);
-            while(temp!=NULL){
+            while(iterator!=NULL){
                 if(flag){
                     flag=0;
-                    printf("(%d,%d)", temp->key, temp->val);
+                    printf("(%d,%d)", iterator->key, iterator->val);
                 }else{
-                     printf("->(%d,%d)", temp->key, temp->val);
+                     printf("->(%d,%d)", iterator->key, iterator->val);
                 }
-                temp=temp->next;
+                iterator=iterator->next;
             }
             printf("\n");
         }
